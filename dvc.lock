@@ -1,7 +1,7 @@
 schema: '2.0'
 stages:
   make_dataset:
-    cmd: python .\src\data\make_dataset.py .\data\raw\creditcard.csv
+    cmd: python .\src\data\make_dataset.py \data\raw\creditcard.csv
     deps:
     - path: .\data\raw\creditcard.csv
       hash: md5
@@ -14,4 +14,4 @@ stages:
     params:
       params.yaml:
         make_dataset.seed: 2023
-        make_dataset.test_split: 0.2
+        make_dataset.test_split: 0.3

@@ -56,7 +56,7 @@ def find_best_model(xtrain,ytrain,xtest,ytest):
                 max_evals=10)
     
     # logging the model
-    with mlflow.start_run():
+    with mlflow.start_run(run_name = 'Final model'):
         mlflow.log_params(best)
 
         # train the model with best parameters

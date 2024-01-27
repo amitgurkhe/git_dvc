@@ -36,14 +36,14 @@ def find_best_model(xtrain,ytrain,xtest,ytest):
 
             pred = model.predict(xtest)
 
-            f1_score = f1_score(ytest,pred)
+            f_score = f1_score(ytest,pred)
             auc_roc = roc_auc_score(ytest,pred)
 
             #mlflow.log_param('penalty',penalty)
             mlflow.log_param('C',C)
             #mlflow.log_param('solver',solver)
 
-            mlflow.log_metric('f1_score',f1_score)
+            mlflow.log_metric('f1_score',f_score)
             mlflow.log_metric('auc_roc',auc_roc)
 
         return auc_roc            
@@ -60,7 +60,7 @@ def find_best_model(xtrain,ytrain,xtest,ytest):
         mlflow.log_params(best)
 
         # train the model with best parameters
-        final_model = LogisticRegression(,C=best['C'],random_state= 42) #penalty=best['penalty']solver=best['solver'],
+        final_model = LogisticRegression(C=best['C'],random_state= 42) #penalty=best['penalty']solver=best['solver'],
         final_model.fit(xtrain,ytrain)
 
         mlflow.sklearn.log_model(final_model,"Best_Model")

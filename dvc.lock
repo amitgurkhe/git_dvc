@@ -14,4 +14,4 @@ stages:
     params:
       params.yaml:
         make_dataset.seed: 2023
-        make_dataset.test_split: 0.4
+        make_dataset.test_split: 0.2

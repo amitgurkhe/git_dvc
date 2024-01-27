@@ -18,20 +18,20 @@ def find_best_model(xtrain,ytrain,xtest,ytest):
 
     # defining space 
     space ={
-        'penalty':hp.choice('penalty',['l1','l2','elasticnet']),
-        'l1_ratio':hp.uniform('l1_ratio',0,1),
-        'solver':hp.choice('solver',['lbfgs', 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', 'saga'])
+        #'penalty':hp.choice('penalty',['l1','l2','elasticnet']),
+        'C':hp.uniform('C',1,3),
+        #'solver':hp.choice('solver',['lbfgs', 'liblinear', 'newton-cg', 'newton-cholesky', 'sag', 'saga'])
     }
 
     # function to train the model and evaluate the best one
     def objective(params):
-        penalty = params['penalty']
-        l1_ratio = params['l1_ratio']
-        solver = params['solver']
+        #penalty = params['penalty']
+        C = params['C']
+        #solver = params['solver']
 
         with mlflow.start_run():
 
-            lr = LogisticRegression(penalty=penalty,l1_ratio=l1_ratio,solver=solver)
+            lr = LogisticRegression(C=C) #penalty=penalty,,solver=solver
             model=lr.fit(xtrain,ytrain)
 
             pred = model.predict(xtest)
@@ -39,9 +39,9 @@ def find_best_model(xtrain,ytrain,xtest,ytest):
             f1_score = f1_score(ytest,pred)
             auc_roc = roc_auc_score(ytest,pred)
 
-            mlflow.log_param('penalty',penalty)
-            mlflow.log_param('l1_ratio',l1_ratio)
-            mlflow.log_param('solver',solver)
+            #mlflow.log_param('penalty',penalty)
+            mlflow.log_param('C',C)
+            #mlflow.log_param('solver',solver)
 
             mlflow.log_metric('f1_score',f1_score)
             mlflow.log_metric('auc_roc',auc_roc)
@@ -52,7 +52,7 @@ def find_best_model(xtrain,ytrain,xtest,ytest):
     best = fmin(fn=objective,
                 space=space,
                 algo=tpe.suggest,
-                trials=Trials()
+                trials=Trials(),
                 max_evals=10)
     
     # logging the model
@@ -60,8 +60,7 @@ def find_best_model(xtrain,ytrain,xtest,ytest):
         mlflow.log_params(best)
 
         # train the model with best parameters
-        final_model = LogisticRegression(penalty=best['penalty'],l1_ratio=best['l1_ratio'],solver=best['solver'],
-                                         random_state= 42)
+        final_model = LogisticRegression(,C=best['C'],random_state= 42) #penalty=best['penalty']solver=best['solver'],
         final_model.fit(xtrain,ytrain)
 
         mlflow.sklearn.log_model(final_model,"Best_Model")

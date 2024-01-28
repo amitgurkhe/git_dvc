@@ -1,11 +1,16 @@
 # local package
--e .
+# -e .
 
-hyperopt
-mlflow
+#hyperopt
+#mlflow
 scikit-learn 
-xgboost
-
+#xgboost
+#streamlit
+fastapi
+uvicorn
+joblib
+# pandas
+# numpy
 # external requirements
 # click
 # Sphinx
